@@ -1,0 +1,6 @@
+[book]
+authors = ["Aleksei Pirogov"]
+language = "ru"
+multilingual = false
+src = "src"
+title = "Astynax's ClojureScript Book"
