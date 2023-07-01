@@ -1,0 +1,313 @@
+<!DOCTYPE HTML>
+<html lang="ru" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Работа с данными - Astynax&#x27;s ClojureScript Book</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="what_is_clojure.html"><strong aria-hidden="true">1.</strong> Clojure, что это</a></li><li class="chapter-item expanded "><a href="edn.html"><strong aria-hidden="true">2.</strong> Данные == код</a></li><li class="chapter-item expanded "><a href="syntax.html"><strong aria-hidden="true">3.</strong> Синтаксис Clojure</a></li><li class="chapter-item expanded "><a href="data_manipulation.html" class="active"><strong aria-hidden="true">4.</strong> Работа с данными</a></li><li class="chapter-item expanded "><a href="toolchain.html"><strong aria-hidden="true">5.</strong> Инструментарий разработчика</a></li><li class="chapter-item expanded "><a href="js_interop.html"><strong aria-hidden="true">6.</strong> Взаимодействие с платформой</a></li><li class="chapter-item expanded "><a href="atoms.html"><strong aria-hidden="true">7.</strong> Работа с изменяемым состоянием</a></li><li class="chapter-item expanded "><a href="atoms_and_reactivity.html"><strong aria-hidden="true">8.</strong> Атомы и реактивность</a></li><li class="chapter-item expanded "><a href="complex_state.html"><strong aria-hidden="true">9.</strong> Сложное состояние</a></li><li class="chapter-item expanded "><a href="rum.html"><strong aria-hidden="true">10.</strong> Rum</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Astynax&#x27;s ClojureScript Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="Работа-с-данными"><a class="header" href="#Работа-с-данными">Работа с данными</a></h1>
+<p>Литералы отображений, множеств и векторов вам уже знакомы. Они, можно сказать, описывают начальное состояние данных, но большая часть программ в процессе работы данные преобразует. Когда речь идёт о преобразовании неизменяемых структур данных, подразумевает создание новой версии данных без потери доступа к старой. Рассмотрим такой пример:</p>
+<pre><code class="language-clojure">(def cart [{:type :apple :amount 3} {:type :orange :amount 1}])
+;; =&gt; #'user/cart
+</code></pre>
+<blockquote>
+<p>В этом примере, как и в последующих, комментарий вида &quot;<code>;; =&gt; …</code>&quot; показывает то, что выводит REPL в ответ на введённую команду. А конкретно <code>#'user/cart</code> означает квалифицированное имя определения, которое мы только что дали. Подробнее о таких именах мы поговорим позже. Сейчас вам достаточно запомнить, что в ответ на вычисление кода некоторого определения вы получаете только что определённое вами имя в качестве подтверждения.</p>
+</blockquote>
+<p>В данном определении описан вектор, представляющий список товаров в продуктовой корзине, и этот вектор связан с именем <code>cart</code>. У Clojure имеется универсальная функция &quot;добавления элемента&quot;, работающая с разными структурами данных. В случае вектора эта функция добавляет элементы в конец этого вектора:</p>
+<pre><code class="language-clojure">(conj cart {:type :banana :amount 5})
+;; =&gt; [{:type :apple, :amount 3} {:type :orange, :amount 1} {:type :banana, :amount 5}]
+</code></pre>
+<p>Всё верно, связка из пяти бананов попала в конец вектора и именно этот новый вектор из трёх элементов стал результатом вычисления вызова функции <code>conj</code>. Однако, если обратиться к определению <code>cart</code>, то окажется, что исходная корзина не изменилась:</p>
+<pre><code class="language-clojure">cart
+;; =&gt; [{:type :apple :amount 3} {:type :orange :amount 1}]
+</code></pre>
+<p>Как же работать с тем же продуктовыми корзинами, если однажды их создав, менять в них ничего не получится? Можно сохранять промежуточные результаты как <em>локальные определения</em>. Или сразу передавать следующей функции в качестве аргумента.</p>
+<h2 id="Передача-состояния-между-функциями"><a class="header" href="#Передача-состояния-между-функциями">Передача состояния между функциями</a></h2>
+<p>Предположим, что корзина покупок <code>cart</code> не отвечает изменившимся требованиям и теперь нам нужно убрать одно яблоко, добавить один апельсин и положить в корзину новый продукт — бутылку молока. Это три отдельных преобразования, каждое из которых вычисляет новую версию данных:</p>
+<pre><code class="language-clojure">;; оригинальное состояние корзины:
+;; [{:type :apple :amount 3} {:type :orange :amount 1}]
+(conj
+  (update-in
+    (update-in
+      cart
+      [0 :amount] dec)
+    [1 :amount] inc)
+  {:type :milk :amount 1})
+;; =&gt; [{:type :apple, :amount 2} {:type :orange, :amount 2} {:type :milk, :amount 1}]
+</code></pre>
+<p>Здесь функция <code>conj</code> вам уже знакома, она добавляет новый элемент в вектор. А функция <code>update-in</code> принимает в качестве аргументов</p>
+<ul>
+<li>структуру данных, с которой она будет работать,</li>
+<li>&quot;путь&quot; до нужного элемента: вектор, содержащий индексы векторов и ключи отображений,</li>
+<li>функцию, которая поменяет значение по указанному пути.</li>
+</ul>
+<p>В этом примере <code>(update-in cart [0 :amount] dec)</code> &quot;спускается&quot; вглубь <code>cart</code>, обращаясь сначала к первому элементу вектора — к отображению, а потом уже к значению ключа <code>:amount</code> внутри этого отображения. К значению, найденному в конце пути, применяется функция <code>dec</code>, которая осуществляет вычитание единицы.</p>
+<blockquote>
+<p>Функцию <code>update-in</code> можно было применить и так: <code>(update-in cart [0 :amount] - 1)</code> — здесь изменение будет осуществлять функция &quot;<code>-</code>&quot;, которая получит исходное значение в качестве первого аргумента и &quot;<code>1</code>&quot; в качестве второго. Проще говоря, аргументы &quot;<code>- 1</code>&quot; будут означать вычисление выражения <code>(- x 1)</code> с подстановкой исходного значения вместо &quot;x&quot;, а &quot;<code>dec</code>&quot; это всего лишь простейший случай вычисления <code>(dec x)</code>. Можно передавать и больше одного дополнительного аргумента для функции­модификатора: <code>(update-in ... + 1 2 3)</code></p>
+</blockquote>
+<p>Такой стиль программирования, когда вы данные пропускаете через конвейер, в котором в один момент времени с данными работает ровно один участок конвейера, называется &quot;Data Flow&quot;. Этот стиль достаточно популярен среди сторонников функционального программирования, так как хорошо сочетается с неизменяемыми структурами данных. И в целом читать код, не думая о том, что любой его фрагмент может менять состояние любых других участков кода, сильно проще.</p>
+<h2 id="Локальные-определения"><a class="header" href="#Локальные-определения">Локальные определения</a></h2>
+<p>Часто в процессе работы с какой-то сложной структурой данных или просто при выполнении многоступенчатого вычисления хочется временно некое промежуточное значение &quot;назвать&quot; и обращаться потом к значению по имени. Такие именования значений, актуальные лишь в рамках некоторого участка кода, называются <em>локальными определениями</em> и создаются с помощью конструкции <code>let</code>:</p>
+<pre><code class="language-clojure">(let [a 100
+      b (- a 13)
+      c (* (/ a 2) b)]
+  [a b c])
+;; =&gt; [100 87 4350]
+</code></pre>
+<p>Структура конструкции <code>let</code> проста: сначала идёт символ <code>let</code>, следом вектор из последовательности чередующихся символов и сопоставляемых с ними значений, а затем так называемое &quot;тело&quot; — строчки кода, в которым будут доступны описанные опеределения.</p>
+<blockquote>
+<p>Если вы попробуете ввести данный пример в REPL на сайте try.clojure.org построчно, то интерпретатор после ввода первой строки выведет предупреждение о том, что во введённом коде не хватает каких-то закрывающих скобок. Однако, как только вы введёте выражение до конца, REPL сможет его вычислить. А вот если вы наберёте код в текстовом редакторе и вставите в REPL, то вставится код в виде одной длинной строчки. Результат вычисления при этом не изменится. Дело в том, что Clojure не увидит разницу, если вы введёте одной строчкой <code>(let [a 100 b (- a 13) …]…)</code> — переносы строк для Clojure равнозначны пробелам и взаимозаменяемы с оными. Этим удобно пользоваться именно в REPL, чтобы не видеть лишних предупреждений и иметь возможность редактирования кода до самого момента отправки его на вычисление.</p>
+</blockquote>
+<p>В рамках одной конструкции <code>let</code> последующим определениям доступны предыдущие, но не наоборот. Так в примере выше значение определения <code>b</code> будет зависеть от значения определения <code>a</code>, а определение <code>c</code> будет зависеть от обоих предшествущих. Это же справедливо и для обычных определений, сделанных с помощью <code>def</code>/<code>defn</code>.</p>
+<p>А вот за пределами тела соответствующей конструкции <code>let</code> локальные определения видны не будут вовсе. Это, в частности, позволяет временно &quot;изменить&quot; значение какого-то определения, существующего на момент вычисления конструкции <code>let</code>, не затронув само оригинальное определение:</p>
+<pre><code class="language-clojure">(def x 42)
+;; =&gt; #'user/x
+(let [x (+ x 1)  ; это вторая версия x,
+      y (let [x (* x 2)]  ; а это уже третья версия x
+          x)]
+  [x y])
+;; =&gt; [43 86]
+x
+;; =&gt; 42
+</code></pre>
+<h2 id="threading-macros"><a class="header" href="#threading-macros">Threading macros</a></h2>
+<p>Если взять пример с модификацией корзины покупок и переписать с помощью локальных определений, то получится что-то такое:</p>
+<pre><code class="language-clojure">(let [result (update-in cart [0 :amount] dec)
+      result (update-in result [1 :amount] inc)
+      result (conj result {:type :milk :amount 1})]
+  result)
+;; =&gt; [{:type :apple, :amount 2} {:type :orange, :amount 2} {:type :milk, :amount 1}]
+</code></pre>
+<p>В целом всё похоже на обычное использование вспомогательной переменной и <code>let</code> даже позволяет использовать одно и то же имя, так как каждое последующее определение &quot;затеняет&quot; (&quot;shadows&quot;) предыдущее. Однако даже для такой переменной нужно придумать имя и в целом код смотрится несколько громоздко. Зато сам порядок преобразований данных читается лучше, чем в оригинальном примере, в котором читать выражение нужно было, двигаясь мысленно изнутри наружу — именно в таком порядке вычисляются вложенные выражения.</p>
+<p>К счастью, Clojure позволяет получить хорошо читаемый &quot;прямой порядок преобразований&quot; и при этом избежать введения лишних &quot;переменных&quot;:</p>
+<pre><code class="language-clojure">(-&gt; cart
+    (update-in [0 :amount] dec)
+    (update-in [1 :amount] inc)
+    (conj {:type :milk :amount 1}))
+;; =&gt; [{:type :apple, :amount 2} {:type :orange, :amount 2} {:type :milk, :amount 1}]
+</code></pre>
+<p>Здесь <code>-&gt;</code>, это не функция, а макрос. А это означает, что код перед вычислением результата будет <em>преобразован</em>. Сейчас вы видите &quot;вызовы&quot; вида <code>(update-in [0 :amount] dec)</code>, которые выглядят как некорректные. Но дело тут в том, что макрос <code>-&gt;</code> <em>подставляет</em> результат вычисления предыдущего шага в качестве <em>первого аргумента</em> в последующий вызов и затем повторяет этот процесс. Макрос <code>-&gt;</code> делает подстановки, пока не преобразует весь &quot;список действий&quot; в обычное вложенное выражение, где каждый последующий шаг оборачивает предудущий.</p>
+<p>Возможно такое преобразование именно потому, что код — это данные! Отдельные &quot;шаги&quot; в последовательности преобразований являются списками, да и сама последовательность — тоже список. Макрос <code>-&gt;</code> лишь перетасовывает список, подставляя одни элементы внутрь других.</p>
+<p>На результат преобразований можно даже посмотреть, не производя сами вычисления. Делается это с помощью функции <code>macroexpand-1</code>. Этой функции нужно передать процитированный фрагмент кода и вы увидите то, во что этот код превратится после разворачивания первого слоя макросов. Вот что получится, если развернуть <code>-&gt;</code> в примере выше:</p>
+<pre><code class="language-clojure">(macroexpand-1
+  '(-&gt; cart
+       (update-in [0 :amount] dec)
+       (update-in [1 :amount] inc)
+       (conj {:type :milk :amount 1})))
+;; =&gt; (conj (update-in (update-in cart [0 :amount] dec) [1 :amount] inc) {:type :milk, :amount 1})
+</code></pre>
+<p>Получился такой же код, какой был в примере передачи результата из функции в функцию!</p>
+<p>Благодаря макросу <code>-&gt;</code> и ему подобным цепочки преобразований данных писать становится очень просто — после того как вы к такому подходу привыкнете. А к хорошему привыкаешь быстро!</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="syntax.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="toolchain.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="syntax.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="toolchain.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,314 @@
+<!DOCTYPE HTML>
+<html lang="ru" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Атомы и реактивность - Astynax&#x27;s ClojureScript Book</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="what_is_clojure.html"><strong aria-hidden="true">1.</strong> Clojure, что это</a></li><li class="chapter-item expanded "><a href="edn.html"><strong aria-hidden="true">2.</strong> Данные == код</a></li><li class="chapter-item expanded "><a href="syntax.html"><strong aria-hidden="true">3.</strong> Синтаксис Clojure</a></li><li class="chapter-item expanded "><a href="data_manipulation.html"><strong aria-hidden="true">4.</strong> Работа с данными</a></li><li class="chapter-item expanded "><a href="toolchain.html"><strong aria-hidden="true">5.</strong> Инструментарий разработчика</a></li><li class="chapter-item expanded "><a href="js_interop.html"><strong aria-hidden="true">6.</strong> Взаимодействие с платформой</a></li><li class="chapter-item expanded "><a href="atoms.html"><strong aria-hidden="true">7.</strong> Работа с изменяемым состоянием</a></li><li class="chapter-item expanded "><a href="atoms_and_reactivity.html" class="active"><strong aria-hidden="true">8.</strong> Атомы и реактивность</a></li><li class="chapter-item expanded "><a href="complex_state.html"><strong aria-hidden="true">9.</strong> Сложное состояние</a></li><li class="chapter-item expanded "><a href="rum.html"><strong aria-hidden="true">10.</strong> Rum</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Astynax&#x27;s ClojureScript Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="Атомы-и-реактивность"><a class="header" href="#Атомы-и-реактивность">Атомы и реактивность</a></h1>
+<p>У атомов в Clojure есть ещё одна особенность, которая очень полезна при разработке Web­приложений: вы можете <em>подписаться</em> на изменения атома и, к примеру, своевременно обновлять пользовательский интерфейс.</p>
+<p>Добавим в наше приложение атом, который будет хранить значение некоего счётчика:</p>
+<pre><code class="language-clojure">(ns ...)
+
+;; атомы часто располагают в начале модуля
+(defonce counter (atom 0))
+
+...
+</code></pre>
+<p>Здесь используется <em>форма</em> <code>defonce</code>, которая похожа на обычное объявление с помощью <code>def</code>. Отличается <code>defonce</code> от <code>def</code> тем, что при горячей перезагрузке кода (которую производит Shadow ClJS в &quot;режиме разработки&quot;) значение такого объявления не изменяется.</p>
+<p>Это достаточно удобно — не терять состояние приложения при перезагрузке кода. Однако нужно понимать, что иногда состояние приходится таки сбрасывать, например если поменялась сама структура того, как данные должны в этом конкретном атоме храниться. В таких случаях вы можете перезагрузить страницу целиком или же в REPL вызвать <code>reset!</code>, перенаправив таким образом атом на новое, корректное значение.</p>
+<h2 id="Подписка-на-изменения"><a class="header" href="#Подписка-на-изменения">Подписка на изменения</a></h2>
+<p>Чтобы наше приложение начало реагировать на изменения атома <code>counter</code>, нужно оформить подписку. Проще всего подписываться на атомы в функции, которая выступает как точка входа. В нашем случае это <code>init</code>:</p>
+<pre><code class="language-clojure">(defn init []
+  (draw @counter)  ;; первый раз draw вызывается принудительно
+  (add-watch counter  ;; атом, на который оформляется подписка
+             :draw    ;; &quot;ключ&quot;, идентифицирующий подписку
+             (fn [_ _ _ value]  ;; функция-обработчик изменений
+               (draw value))))
+</code></pre>
+<p>Ключ здесь нужен для того, чтобы функция­обработчик могла отличать один атом от другого, если эта функция оказывается подписана на несколько атомов.</p>
+<p>Сейчас в роли обработчика выступает анонимная функция. И как любой обработчик, функция эта получает при вызове четыре аргумента:</p>
+<ol>
+<li>сам атом,</li>
+<li>упомянутый выше ключ,</li>
+<li>значение, на которое атом указывал ранее,</li>
+<li>значение, на которое атом указывает сейчас</li>
+</ol>
+<blockquote>
+<p>В примере выше нам интересно только новое значение, поэтому остальные параметры функции­обработчика названы именем <code>_</code>. Это общепринятый способ называть аргументы, наличия которых требует вызывающая сторона, а самой функции эти параметры не важны.</p>
+</blockquote>
+<p>В данный момент обработчик вызывает функцию <code>draw</code> с текущим значением счётчика в качестве аргумента. И принудительный вызов <code>(draw @counter)</code> в начале работы программы тоже передаёт значение счётчика в функцию <code>draw</code> Нужно изменить функцию так, чтобы она имела соответствующий параметр и отображала передаваемые ей значения:</p>
+<pre><code class="language-clojure">(defn draw [value]
+  (-&gt; (.querySelector js/document &quot;#root&quot;)
+      .-innerHTML
+      (set! (str &quot;&lt;h1&gt;&quot; value &quot;&lt;/h1&gt;&quot;))))
+</code></pre>
+<blockquote>
+<p>Функция <code>str</code> конкатенирует все свои аргументы в одну строку, приводя к строке значения других типов, если таковые встречаются.</p>
+</blockquote>
+<p>Если теперь обновить страницу, или вызвать <code>(init)</code> в REPL, то страница должна показать начальное значение счётчика — &quot;0&quot;. И если в REPL увеличить значение счётчика с помощью вызова <code>(swap! counter inc)</code>, то текст на странице также изменится и произойдёт это автоматически — благодаря подписке.</p>
+<h2 id="Реакция-на-перезагрузку-кода"><a class="header" href="#Реакция-на-перезагрузку-кода">Реакция на перезагрузку кода</a></h2>
+<p>Стоит добавить ещё один кусочек реактивности в приложение: научить его реагировать на горячую загрузку кода. Для этого достаточно описать функцию и добавить ей определённый флаг в качестве <em>метаданных</em>:</p>
+<pre><code class="language-clojure">(defn ^:dev/after-load redraw []
+  (draw @counter))
+</code></pre>
+<p>Здесь <code>^:dev/after-load</code> означает &quot;дописать к метаданным функции redraw значение <code>true</code> по данному ключу&quot;. Дело в том, что метаданные хранятся в виде отображения. Но часто важно именно наличие ключа, а само значение не существенно. Поэтому для такого случая разрешён укороченный вариант записи. Если вдруг вам будет интересно, можете запросить в REPL метаданные для функции redraw:</p>
+<pre><code class="language-clojure">com.frontend.app&gt; (meta #'redraw)
+;; =&gt; {:ns com.frontend.app,
+ :name redraw,
+ :file &quot;com/frontend/app.cljs&quot;,
+ ...
+ :dev/after-load true,  ; вот и флаг!
+ ... }
+</code></pre>
+<p>Метаданные широко используются в самых разных задачах. Метаданные объявляемых функций описывают, в каком файле какая функция была объявлена, с какой и по какую строчку это объявление в файле располагается и тому подобное. В данном же примере Shadow ClJS по наличию этого флага узнаёт, что данную функцию нужно вызывать каждый раз сразу после загрузки новой версии кода.</p>
+<blockquote>
+<p>В Clojure метаданные можно добавлять практически к любому значению за исключением <em>примитивных типов</em> вроде строк или чисел. Для этого используется функция <code>(with-meta значение {:ключ :значение ...})</code>. И даже <code>defn</code> в реальности представляет собой макрос, который связывает символ имени с анонимной функцией, попутно с помощью <code>with-meta</code> добавляя к ссылке на функцию порцию метаданных.</p>
+</blockquote>
+<h2 id="Интерактивность"><a class="header" href="#Интерактивность">Интерактивность</a></h2>
+<p>На внешние воздействия счётчик уже реагирует, теперь нужно добавить пару кнопок, чтобы и пользователь приложения мог менять значение счётчика. Пока что мы описываем теги в виде строковых литералов, поэтому <code>&lt;button&gt;</code> пока будут получать обработчики нажатия в атрибуте <code>onclick</code>. А это значит, что в качестве значения атрибута будет выступать код на JavaScript, пусть даже мы и хотим вызывать функции, которые напишем на Clojure. Впрочем, так мы сможем увидеть ещё один вид взаимодействия ClJS с платформой: вызов функций из мира ClojureScript в коде на JavaScript.</p>
+<p>Так как проект сейчас имеет всего один модуль, описывающий пространство имён <code>com.frontend.app</code>, то все определения, описанные в этом модуле, будут видны со стороны JavaScript как атрибуты объекта <code>app</code>, являющегося атрибутом объекта <code>frontend</code>, являющегося атрибутом объекта <code>com</code>, который, наконец, является атрибутом глобального объекта <code>document</code>. Другими словами уже имеющаяся у нас функция <code>init</code> может быть вызвана в коде на JavaScript по полному имени: <code>com.frontend.app.init()</code> — всё настолько просто! Разве что имена, которые по­лисповски названы в стиле <code>kebab-case</code>, со стороны JS будут выглядеть как <code>snake_case</code>.</p>
+<p>Добавим сразу обе функции, которые будут обрабатывать нажатия кнопок, и модифицируем функцию <code>draw</code> так, чтобы кнопки встраивались в вёрстку:</p>
+<pre><code class="language-clojure">(defn inc-counter [] (swap! counter inc))
+(defn dec-counter [] (swap! counter dec))
+
+(defn button [text action]
+  (str &quot;&lt;button onclick=\&quot;&quot;
+       (-&gt; action
+           .-name
+           (clojure.string/replace &quot;$&quot; &quot;.&quot;))
+       &quot;()\&quot;&gt;&quot;
+       text
+       &quot;&lt;/button&gt;&quot;))
+
+(defn draw [value]
+  (-&gt; (.querySelector js/document &quot;#root&quot;)
+      .-innerHTML
+      (set! (str &quot;&lt;h1&gt;&quot;
+                 value
+                 (button &quot;+&quot; inc-counter) ; вот и кнопки
+                 (button &quot;-&quot; dec-counter)
+                 &quot;&lt;/h1&gt;&quot;))))
+</code></pre>
+<p>Сами обработчики устроены просто: они всего лишь обновляют атом с помощью функций <code>inc</code> и <code>dec</code> (увеличение и уменьшение на единицу, соответственно).</p>
+<p>В <code>draw</code> тоже добавились только два вызова функции <code>button</code>. Каждый раз в функцию передавались строка и функция, тоже с виду всё просто.</p>
+<p>А вот функция <code>button</code> интересна тем, как она работает со значениями своего параметра <code>action</code>. В качестве значений этот параметр получает функции на ClojureScript, но в HTML­то нужно вставить правильные имена  JavaScript­объектов, в которые эти функции будут скомпилированы!</p>
+<p>К счастью, каждая скомпилированная функция получает имя, составленное из полного имени пространства имён плюс имени функции, только в этом имени все точки заменяются на &quot;<code>$</code>&quot;, а все дефисы — на символ &quot;<code>_</code>&quot;. И сохраняется это имя в атрибуте <code>.name</code> объекта. Нам остаётся только извлечь значение атрибута, заменить в нём <code>$</code> обратно на <code>.</code>, и мы получим &quot;внешнее имя&quot;: &quot;<code>com$frontend$app$inc_counter</code>&quot; превратится в &quot;<code>com.frontend.app.counter</code>&quot;. Такое преобразование и выполняется выше в коде функции <code>button</code>.</p>
+<h2 id="Подведём-итоги"><a class="header" href="#Подведём-итоги">Подведём итоги</a></h2>
+<p>Итак, теперь приложение стало по-настоящему интерактивным: кнопки можно нажимать, нажатия изменят состояние приложения, интерфейс прореагирует на изменения — цикл замкнулся, любые более сложные приложения реализуются похожим образом... или нет?</p>
+<p>Вы, наверняка, подумали, что работать этими &quot;внутренними&quot; и &quot;внешними&quot; именами функций утомительно и склеивание строк не выглядит как надёжный и быстрый способ наполнить страницу. Да, можно заменить склеивание строк на создание и вставку элементов DOM. И вместе с этим перейти от назначения обработчиков событий через атрибуты тегов к прямому связыванию функций с соответствующими атрибутами всё тез же элементов DOM. Это сделает код более надёжным и быстрым, но и количество кода вырастет кратно!</p>
+<p>Вот только и с точки зрения JS работать с DOM напрямую утомительно. Поэтому большинство разработчиков использует библиотеки, скрывающие всю низкоуровневую работу с документом. Точно так же поступают и в мире ClojureScript, зачастую используя те же библиотеки из мира JS, только в более удобной для программирования именно на ClojureScript обёртке.</p>
+<p>Таким образом, текущая версия приложения выглядит сложнее, чем могла бы быть. Но зато и никакой &quot;магии&quot; сейчас в проекте нет — видно, как ClojureScript работает с платформой. И в будущем вы сможете себе представить, как та или иная библиотека работает &quot;под капотом&quot;.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="atoms.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="complex_state.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="atoms.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="complex_state.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

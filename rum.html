@@ -1,0 +1,269 @@
+<!DOCTYPE HTML>
+<html lang="ru" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Rum - Astynax&#x27;s ClojureScript Book</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="what_is_clojure.html"><strong aria-hidden="true">1.</strong> Clojure, что это</a></li><li class="chapter-item expanded "><a href="edn.html"><strong aria-hidden="true">2.</strong> Данные == код</a></li><li class="chapter-item expanded "><a href="syntax.html"><strong aria-hidden="true">3.</strong> Синтаксис Clojure</a></li><li class="chapter-item expanded "><a href="data_manipulation.html"><strong aria-hidden="true">4.</strong> Работа с данными</a></li><li class="chapter-item expanded "><a href="toolchain.html"><strong aria-hidden="true">5.</strong> Инструментарий разработчика</a></li><li class="chapter-item expanded "><a href="js_interop.html"><strong aria-hidden="true">6.</strong> Взаимодействие с платформой</a></li><li class="chapter-item expanded "><a href="atoms.html"><strong aria-hidden="true">7.</strong> Работа с изменяемым состоянием</a></li><li class="chapter-item expanded "><a href="atoms_and_reactivity.html"><strong aria-hidden="true">8.</strong> Атомы и реактивность</a></li><li class="chapter-item expanded "><a href="complex_state.html"><strong aria-hidden="true">9.</strong> Сложное состояние</a></li><li class="chapter-item expanded "><a href="rum.html" class="active"><strong aria-hidden="true">10.</strong> Rum</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Astynax&#x27;s ClojureScript Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="rum"><a class="header" href="#rum">Rum</a></h1>
+<p>В мире JavaScript популярным средством построения графических интерфейсов является библиотека React. И так уж вышло, что библиотека эта резонирует с идеями функционального программирования: чистые функции без побочных эффектов вроде прямого изменения структуры документа, передача текущего состояния через аргументы функций вместо использования локальных изменяемых состояний.</p>
+<blockquote>
+<p>Да, современный React не запрещает использование компонент с собственными кусочками состояния, да и от чистых функций часто уходят в сторону классов. Но именно в мире ФП принято React использовать по старинке, в виде <em>функций из состояния в представление</em>.</p>
+</blockquote>
+<p>React можно использовать в ClJS и напрямую через JavaScript interoperability, но гораздо удобнее взять готовую обёртку. Rum — одна из таких обёрток. И это довольно тонкая обёртка в сравнении с другими библиотеками и фреймворками: вы имеете полную свободу во всём, кроме &quot;отрисовки&quot; интерфейса — Rum берёт на себя только эту часть работы.</p>
+<h2 id="Установка-rum"><a class="header" href="#Установка-rum">Установка Rum</a></h2>
+<p>Чтобы добавить Rum в проект, вам нужно в <code>shadow-cljs.edn</code> упомянуть библиотеку вместе с версией:</p>
+<pre><code class="language-clojure"> …
+ :dependencies
+ [[rum &quot;0.12.10&quot;]]
+ …
+</code></pre>
+<p>Теперь останется только перезапустить сервер Shadow ClJS. Но перед новым запуском сервера стоит установить ещё и соответствующие библиотеки для JavaScript. Это делается привычно силами NPM:</p>
+<pre><code class="language-shell">$ npm install react@16 react-dom@16
+</code></pre>
+<blockquote>
+<p>Версия 16 была выбрана потому, что Rum не использует новые штуки, появившиеся в React в последнее время. Но использует кое-какие старые, поэтому чтобы не видеть лишних предупреждений в консоли браузера, стоит остановиться на &quot;стабильной&quot; версии <code>react@16</code>. Впрочем, вы можете попробовать установить и самую свежую в качестве эксперимента.</p>
+</blockquote>
+<p>Теперь, когда зависимости установлены, запустите сервер Shadow ClJS.</p>
+<h2 id="Первое-использование"><a class="header" href="#Первое-использование">Первое использование</a></h2>
+<p>Перепишем счётчик с помощью Rum. Для этого импортируем модуль <code>rum.core</code> (изменения коснутся файла <code>app.cljs</code>):</p>
+<pre><code class="language-clojure">(ns com.frontend.app
+  (:require [rum.core :as rum]))
+
+;; ^ здесь :as означает &quot;импортировать под именем таким-то&quot;
+</code></pre>
+<p>Теперь нужно удалить объявления функций <code>inc-counter</code> и <code>dec-counter</code> — сможем обойтись без них. А функцию <code>draw</code> нужно изменить таким образом:</p>
+<pre><code class="language-clojure">(rum/defc draw &lt; rum/reactive []
+  [:h1
+   (str (rum/react counter))
+   [:button {:on-click (fn [] (swap! counter inc))} &quot;+&quot;]
+   [:button {:on-click (fn [] (swap! counter dec))} &quot;-&quot;]])
+</code></pre>
+<p>Здесь <code>defc</code> выступает как аналог <code>defn</code>, но объявляет не обычную функцию, а &quot;компонент&quot;. Последовательность &quot;<code>&lt; rum/reactive</code>&quot; называется добавлением &quot;примеси&quot; (&quot;mixin&quot;). Примеси добавляют функции­компоненту особые свойства.</p>
+<p>Примесь <code>rum/reactive</code> делает компонент реактивным — реагирующим на изменения некоторых ссылок. В данном случае интерфейс будет реагировать на изменение атома <code>counter</code>, потому что в &quot;теле&quot; компонента этот атом использован в вызове <code>(rum/react counter)</code>. Такой вызов работает как разыменовывание ссылки и одновременно с этим подсказывает компоненту, за какими ссылками следует следить. При этом вам не нужно самостоятельно оформлять никакие подписки — если, конечно, вы не наблюдаете за атомами в коде, не связанном с построением GUI.</p>
+<p>Компонент определён, теперь его нужно &quot;смонтировать&quot; — привязать к уже имеющемуся узлу дереве документа. Делается это так:</p>
+<pre><code class="language-clojure">(defn init []
+  (rum/mount (draw) (.querySelector js/document &quot;#root&quot;)))
+</code></pre>
+<p>Теперь счётчик должен снова заработать. А ведь кода стало меньше раза в три!</p>
+<h2 id="rum-и-html"><a class="header" href="#rum-и-html">Rum и HTML</a></h2>
+<p>Стоит отметить две вещи, которые уде видны в нашем коде:</p>
+<ol>
+<li>&quot;вёрстка&quot; выполнена с помощью обычных элементов, которыми мы описываем данные — векторов, отображений, ключевых слов, строк</li>
+<li>Обработчики событий — это обычные функции на ClojureScript и больше нет нужды помнить особенности компиляции ClJS в JS</li>
+</ol>
+<p>Второй пункт скорее просто приятен. А вот первый демонстрирует одну из особенностей ClojureScript — построение доменно­ориентированных языков с помощью структур данных или, как ещё говорят, &quot;data­driven design&quot;. Строить языки под задачу вообще любят пользователи большинства лиспоподобных языков, но именно в Clojure предпочитают явно отделять что-то, описанное с помощью векторов и отображений, от &quot;обычного кода&quot;, записанного с помощью списков. Считается, что это разделение идёт на пользу читаемости.</p>
+<p>Итак, HTML в Rum представлен как дерево из вложенных друг в друга векторов. Первый элемент вектора описывает имя тега, CSS­классы, ему назначенные и идентификатор в любых разумных сочетаниях:</p>
+<ul>
+<li><code>:div#content</code> — это <code>&lt;div id=&quot;content&quot;&gt;</code></li>
+<li><code>:.counter</code> — это <code>&lt;div class=&quot;counter&quot;&gt;</code>, потому что тег <code>div</code> подразумевается</li>
+<li><code>:span#foo.bar.baz</code> — это <code>&lt;span id=&quot;foo&quot; class=&quot;bar baz&quot;&gt;</code></li>
+</ul>
+<p>Если нужно добавить какие-то дополнительные атрибуты тегу, то вторым элементов вектора указывается отображение, где имена атрибутов кодируются ключевыми словами, а значения строками (или тем, что безопасно приводится к строке). К примеру, обработчики нажатия у тегов <code>button</code> в нашем коде записаны как <code>{:on-click (fn [] …)}</code>.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="complex_state.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="complex_state.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

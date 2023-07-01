@@ -1,0 +1,251 @@
+<!DOCTYPE HTML>
+<html lang="ru" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Работа с изменяемым состоянием - Astynax&#x27;s ClojureScript Book</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="what_is_clojure.html"><strong aria-hidden="true">1.</strong> Clojure, что это</a></li><li class="chapter-item expanded "><a href="edn.html"><strong aria-hidden="true">2.</strong> Данные == код</a></li><li class="chapter-item expanded "><a href="syntax.html"><strong aria-hidden="true">3.</strong> Синтаксис Clojure</a></li><li class="chapter-item expanded "><a href="data_manipulation.html"><strong aria-hidden="true">4.</strong> Работа с данными</a></li><li class="chapter-item expanded "><a href="toolchain.html"><strong aria-hidden="true">5.</strong> Инструментарий разработчика</a></li><li class="chapter-item expanded "><a href="js_interop.html"><strong aria-hidden="true">6.</strong> Взаимодействие с платформой</a></li><li class="chapter-item expanded "><a href="atoms.html" class="active"><strong aria-hidden="true">7.</strong> Работа с изменяемым состоянием</a></li><li class="chapter-item expanded "><a href="atoms_and_reactivity.html"><strong aria-hidden="true">8.</strong> Атомы и реактивность</a></li><li class="chapter-item expanded "><a href="complex_state.html"><strong aria-hidden="true">9.</strong> Сложное состояние</a></li><li class="chapter-item expanded "><a href="rum.html"><strong aria-hidden="true">10.</strong> Rum</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Astynax&#x27;s ClojureScript Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="Работа-с-изменяемым-состоянием"><a class="header" href="#Работа-с-изменяемым-состоянием">Работа с изменяемым состоянием</a></h1>
+<p>Практически любое приложение меняет своё состояние в процессе работы. В JavaScript состояние хранится в глобальных переменных, в лексических замыканиях, в атрибутах объектов. ClojureScript, как hosted язык, тоже может создавать JS­объекты и изменять их содержимое в процессе работы программы. Однако, в мире JavaScript достаточно часто эти объекты, изображающие фрагменты одного большого &quot;состояния всей системы&quot;, изменяются разными частями программы и уследить за всеми изменениями бывает достаточно сложно, если вообще возможно. Поэтому в Clojure используются неизменяемые структуры данных, доступ к которым осуществляется через <em>изменяемые ссылки</em>.</p>
+<h2 id="Атомы"><a class="header" href="#Атомы">Атомы</a></h2>
+<p>В Clojure существует несколько видов изменяемых ссылок, обладающих различными свойствами, однако в ClojureScript доступен ровно один вид: <em>атомы</em>. В процессе работы с атомом мы получаем текущее значение по ссылке, создаём новое значение на основе старого и только после этого перенаправляем ссылку на это новое значение. При этом непосредственно изменение ссылки происходит мгновенно, насколько сильно бы мы не меняли само значение. Поэтому не возникает печально известное <em>состояние гонки</em>, когда часть данных уже поменялась, а часть ещё не успела измениться и какие-то другие процессы в программе могут получить доступ к <em>неконсистентному состоянию</em>. При использовании атомов по ссылке всегда доступно либо старое состояние, либо уже новое, никакой возможности получить частично изменённые данные нет!</p>
+<p>Создаётся атом функцией <code>(atom начальное-значение)</code> и обычно связывается с некоторым именем:</p>
+<pre><code class="language-clojure">(def counter (atom 0))
+</code></pre>
+<p>Получить текущее значение, на которое ссылается атом, можно с помощью так называемого <em>разыменования</em> (<em>dereferencing</em>), указав перед именем символ <code>@</code>: <code>(println @counter)</code>. При разыменовывании вы получаете именно текущее значение, поэтому булево выражение <code>(= @counter @counter)</code> иногда может оказаться ложным — если другая часть программы успеет изменить ссылку между двумя разыменованиями.</p>
+<p>И, наконец, перенаправить ссылку на новое значение можно с помощью функции <code>(reset! имя-атома новое-значение)</code>.</p>
+<blockquote>
+<p>Заметьте, функция <code>set!</code>, изменяющая значение атрибутов JS­объектов, и функция <code>reset!</code>, перенаправляющая ссылки атомов, имеют восклицательные знаки в именах. Так в Clojure принято называть функции, за использованием которых нужно внимательно следить. Как правило, это функции, меняющие что-то за пределами видимости текущего участка кода.</p>
+</blockquote>
+<h2 id="reset-против-swap"><a class="header" href="#reset-против-swap"><code>reset!</code> против <code>swap!</code></a></h2>
+<p>У функции <code>reset!</code> есть один недостаток: если вы разыменовали атом, долго вычисляли новое значение, а потом перенаправили на него атом с помощью <code>reset!</code>, то может так случиться, что какой-то другой процесс успеет изменить атом после вашего разыменования, но до вашего <code>reset!</code>. Если такое случится, то часть информации будет потеряна. Вот так эта ситуация может выглядеть:</p>
+<pre><code class="language-clojure">;; [ первый процесс ]                | ;; [ второй процесс ]
+;;                                   | ;;
+;; получаем текущий баланс счёта     | ;;
+(let [acc @bob-account]              | ;;
+  ;; что-то долго делаем             | (let [acc @bob-account]
+  ;; ...                             |   ;; быстро снимаем 10 кредитов
+  ;; ...                             |   (reset! bob-account (- acc 10)))
+  ;; списываем 100 кредитов          | ;;
+  (reset! bob-account (- acc 100)))  | ;;
+</code></pre>
+<p>Здесь первый процесс даже не узнает о том, что баланс счёта уже поменялся на -10 кредитов, и перезапишет с расходом -100 кредитов, а первые -10 потеряются!</p>
+<p>Чтобы попадать в такие ситуации пореже, обычно стараются разыменовывать атомы максимально близко к вызову <code>reset!</code>. Однако есть более безопасный способ: функция <code>swap!</code>. Эта функция не принимает новое значение для атома, а вместо этого ожидает, чтобы вы предоставили ей <em>функцию из старого значения в новое</em>. При этом само внутреннее устройство атома гарантирует, что при вызове такой <em>функции­модификатора</em> между получением старого значения и переключением ссылки на новое никакой другой процесс не вклинится. То есть использование <code>swap!</code> делает изменение истинно <em>атомарным</em> (именно поэтому атомы называются так как называются).</p>
+<p>Чтобы списать со счёта Боба десять кредитов, нужно применить <code>swap!</code> таким образом: <code>(swap! bob-account - 10)</code> — значение по ссылке будет передано в функцию­модификатор первым, но вы можете указать и другие аргументы для функции. Таким образов в одной части программы можно сделать <code>(swap! bob-account - 100)</code>, а в другой выполнить <code>(swap! bob-account - 10)</code>, и общие траты составят -110!</p>
+<h2 id="Атомарность-и-побочные-эффекты"><a class="header" href="#Атомарность-и-побочные-эффекты">Атомарность и побочные эффекты</a></h2>
+<p>Функция <code>swap!</code> устроена так, что при перед вызовом функции­модификатора запоминает старый адресат ссылки. А после того, как модификатор вернул новое значение, то <code>swap!</code> проверяет, указывает ли ссылка на запомненный ранее адрес. Если ссылка оказалась перенаправлена, пока модификатор выполнял вычисления, то <code>swap!</code> запускает модификатор ещё раз — уже с новым значением (тем, на которое теперь указывает ссылка) в качестве аргумента.</p>
+<p>Такие повторы могут происходить не единожды, если с атомом одновременно и достаточно активно работают несколько процессов в рамках одной программы. Поэтому очень важно не производить в теле функции­модификатора никакие побочные эффекты вроде изменения других атомов, отправки запросов к серверу и тому подобные действия. Иначе вы рискуете ощутить эти побочные эффекты несколько раз, даже если сделали один вызов <code>swap!</code>.</p>
+<p>Рекомендация тут может быть такая: вам нужно выносить любые затратные с точки зрения времени или сопряжённые с побочными эффектами вычисления за пределы функции­модификатора, а <code>swap!</code> использовать только в самом конце. Следовать этой рекомендации обычно не слишком сложно, и отделение побочных эффектов от изменения состояния идёт на пользу читаемости кода.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="js_interop.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="atoms_and_reactivity.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="js_interop.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="atoms_and_reactivity.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

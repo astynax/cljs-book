@@ -1,0 +1,254 @@
+<!DOCTYPE HTML>
+<html lang="ru" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Clojure, что это - Astynax&#x27;s ClojureScript Book</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="what_is_clojure.html" class="active"><strong aria-hidden="true">1.</strong> Clojure, что это</a></li><li class="chapter-item expanded "><a href="edn.html"><strong aria-hidden="true">2.</strong> Данные == код</a></li><li class="chapter-item expanded "><a href="syntax.html"><strong aria-hidden="true">3.</strong> Синтаксис Clojure</a></li><li class="chapter-item expanded "><a href="data_manipulation.html"><strong aria-hidden="true">4.</strong> Работа с данными</a></li><li class="chapter-item expanded "><a href="toolchain.html"><strong aria-hidden="true">5.</strong> Инструментарий разработчика</a></li><li class="chapter-item expanded "><a href="js_interop.html"><strong aria-hidden="true">6.</strong> Взаимодействие с платформой</a></li><li class="chapter-item expanded "><a href="atoms.html"><strong aria-hidden="true">7.</strong> Работа с изменяемым состоянием</a></li><li class="chapter-item expanded "><a href="atoms_and_reactivity.html"><strong aria-hidden="true">8.</strong> Атомы и реактивность</a></li><li class="chapter-item expanded "><a href="complex_state.html"><strong aria-hidden="true">9.</strong> Сложное состояние</a></li><li class="chapter-item expanded "><a href="rum.html"><strong aria-hidden="true">10.</strong> Rum</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Astynax&#x27;s ClojureScript Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="clojure-что-это"><a class="header" href="#clojure-что-это">Clojure, что это</a></h1>
+<h2 id="clojure-vs-clojurescript"><a class="header" href="#clojure-vs-clojurescript">Clojure VS ClojureScript</a></h2>
+<p>В этой небольшой книге вы познакомитесь с языком Clojure в лице его диалекта ClojureScript. И, в отличие от пары совершенно разных языков Java и JavaScript, эти два языка по сути являются одним и отличаются только тонкостями интеграции с конкретной платформой: программы на Clojure запускаются на Java Virtual Machine, а программы на ClojureScript, скомпилированные в JavaScript выполняются в Web-браузере (или, к примеру, на NodeJS).</p>
+<p>Тот факт, что языки семейства Clojure очень похожи между собой, означает, что и навыки при изучении вы получаете универсальные: если вам вдруг захочется после ClojureScript попробовать пописать на Clojure, вы будете чувствовать себя как дома! И по этой же причине вы, когда увидите в тексте упоминание Clojure, можете считать,   что упоминается всё семейство языков. А вот если будет упомянут именно ClojureScript, то это будет означать, что описывается какая-то особенность этой конкретной реализации.</p>
+<h2 id="clojure--это-lisp"><a class="header" href="#clojure--это-lisp">Clojure — это Lisp</a></h2>
+<p>Если вы когда-либо интересовались историей компьютерных наук, вы точно встречались с упоминанием семейства языков Lisp. А если даже история вас не слишком интересует, то само название вы наверняка слышали.</p>
+<p>Семейство это старое и влиятельное. Сейчас трудно найти языки, авторы которых не вдохновлялись лиспами в той или иной степени. Тот же JavaScript изначально выглядел как ещё одна реализация Scheme, представителя одной из основных ветвей семейства лиспоподобных языков. И пусть в итоге JavaScript оказался синтаксически похож на Java, но внутри это до сих пор Lisp в овечьей шкуре.</p>
+<p>Clojure визуально очень похож на другие лиспы, хотя ни в какие другие семейства не входит. Clojure, как всякий уважающий себя Lisp, имеет</p>
+<ul>
+<li>функции как сущности первого класса</li>
+<li>упрощённый синтаксис, пригодный для программного манипулирования</li>
+<li>систему метапрограммирования, также известную как &quot;макросы&quot;</li>
+</ul>
+<h2 id="Особенности-clojure"><a class="header" href="#Особенности-clojure">Особенности Clojure</a></h2>
+<p>Автор Clojure Рич Хикки, создавая этот язык, выбрал для себя главной задачей борьбу со сложностью. В его понимании наиболее сложными концепциями — сложными для восприятия человеком и удержания в голове при работе с кодом — являются изменяемое состояние и одновременное исполнение нескольких подпрограмм. Кроме того в язык были заложены богатые средства для работы с данными и инструменты для взаимодействия с платформой. Рассмотрим же все эти составляющие &quot;образа языка&quot;.</p>
+<h3 id="Изменяемые-данные"><a class="header" href="#Изменяемые-данные">Изменяемые данные</a></h3>
+<p>Чтобы программист реже сталкивался с изменяемым состоянием, в мире Clojure в качестве основного подхода для решения задач используется функциональное программирование. Этот подход характерен использованием неизменяемых структур данных и чистых функций — таких функций, которые при вычислении результата не влияют на другие части программы и сами не зависят от того, в каком состоянии сейчас находится система.</p>
+<p>Неизменяемые структуры данных подразумевают то, что когда вы &quot;меняете&quot; что-то в такой структуре, вы не затрагиваете оригинал, а вместо этого получаете новую структуру, содержащую нужные изменения. Чтобы такое поведение не приводило к ненужному перерасходу ресурсов машины, используются специальные <em>персистентные неизменяемые структуры данных</em>, которые в новых версиях данных используют повторно те части структуры, которые не менялись. Clojure, как типичный язык для &quot;в первую очередь функционального программирования&quot;, поддерживает такие структуры и умеет работать с ними эффективно.</p>
+<h3 id="Одновременное-исполнение-подпрограмм"><a class="header" href="#Одновременное-исполнение-подпрограмм">Одновременное исполнение подпрограмм</a></h3>
+<p>Сложность разработки программ, части которых работают одновременно, часто тоже связана с изменяемыми данными. Когда изменяемые данные доступны сразу нескольким <em>потокам</em> (они же <em>сопрограммы</em>, то есть программы, работающие сообща) и в любой момент времени могут быть изменены любым из них, часто практически невозможно предсказать то, как будет себя вести система в целом. Обычно программисты применяют специальные <em>примитивы синхронизации</em>, таких как semaphores и locks, чтобы управлять тем, какая из сопрограмм модифицирует данные в какой момент времени — и получают специфические для такого подхода проблемы вроде <em>блокировок</em> (<em>dead locks</em>) или <em>состояния гонки</em> (<em>race condition</em>).</p>
+<p>Clojure наступает на класс проблем, связанных с многопоточностью, с двух фронтов:</p>
+<ol>
+<li>неизменяемые структуры данных позволяют сопрограмме не бояться за сохранность данных, пока она с этими данными работает;</li>
+<li>высокоуровневые средства позволяют и вовсе обойтись без передачи нескольким сопрограммам данных, доступных для прямого изменения. Вместо этого вы связываете взаимодействующие сопрограммы, к примеру, <em>каналом</em>, который доставляет сообщения от одной стороны к другой.</li>
+</ol>
+<h3 id="Работа-с-данными"><a class="header" href="#Работа-с-данными">Работа с данными</a></h3>
+<blockquote>
+<p>Лучше иметь 100 функций, работающих с одной структурой данных, чем иметь 10 функций, работающих с 10 структурами данных.</p>
+</blockquote>
+<p>Алан Перлис так писал в своих &quot;Эпиграммах о программировании&quot; (1982). Эта цитата очень хорошо характеризует тот факт, что в языках семейства Lisp (название расшифровывается как &quot;List Processor&quot;!) принято на всё смотреть через призму списков. Список — великий уравнитель, и всё есть список, даже сам код на Lisp. Любые другие структуры данных реализуются с помощью <em>односвязных списков</em>, для работы с которыми лиспы обычно имеют богатейший набор инструментов.</p>
+<p>С одной стороны наличие универсальной структуры &quot;под капотом&quot; у большинства других структур позволяет легко писать код, преобразующий одни данные в другие. А нужный уровень абстракции достигается предоставлением функций, при использовании которых вам не нужно знать, что внутри у данных списки списков списков. С другой стороны, как показывает многолетняя практика, некоторый набор структур общего назначения нужен настолько часто, что неплохо бы иметь эти структуры уже реализованными в языке и снабжёнными нужным количеством инструментов для работы с ними.</p>
+<p>Получается, что полезно иметь &quot;штук пять структур с сотней функций для каждой&quot;! Недаром говорят:</p>
+<blockquote>
+<p>если нужно оставить только одну структуру данных, выбирай hash map</p>
+</blockquote>
+<p>Вот и Рич Хикки в дополнение к списку заложил в Clojure такие структуры как <em>отображение</em> (<em>map</em>), <em>множество</em> (<em>set</em>) и <em>вектор</em> (<em>vector</em>) и стандартная библиотека языка обладает множеством инструментов для работы с ними. И даже сам код на Clojure строится с использованием этих структур, а не одних лишь круглых скобок как в классических lisp.</p>
+<h3 id="Взаимодействие-с-платформой"><a class="header" href="#Взаимодействие-с-платформой">Взаимодействие с платформой</a></h3>
+<p>Clojure изначально создавался для запуска на Java Virtual Machine во многом потому, что платформа эта существует давно, а значит хорошо оптимизирована и &quot;обросла&quot; изрядным количеством библиотек, написанных для неё на Java и других языках, компилируемых в тот же формат байткода. Возможность легко подключить и использовать в своём коде сторонние библиотеки как правило требует от языка соответствующей поддержки.</p>
+<p>Так как JVM исполняет код, который живёт в классах и оперирует объектами этих классов, то работать с классами нужно и со стороны Clojure/JVM. Более того, иногда нужно представить код, написанный на Clojure/JVM, в виде тех самых классов так, чтобы внешний код мог их использовать. Такая интеграция с платформой, работающая в обе стороны, называется <em>interoperability</em> или сокращённо <em>interop</em>.</p>
+<p>У Clojure/JVM имеется хороший interop с JVM, а у ClojureScript — хороший interop с Browser API и NodeJS API. Благодаря тому, что использовать interoperability достаточно просто, многие популярные &quot;не родные&quot; библиотеки силами сообщества уже снабжены соответствующими &quot;обёртками&quot; и вам погружаться в interop не нужно.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+                            <a rel="next" href="edn.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+                    <a rel="next" href="edn.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
